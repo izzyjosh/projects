@@ -1,6 +1,21 @@
 import random
 
 
+def help():
+	print("\tINSTRUCTIONS")
+	print('''The game has three levels
+level1: you are to guess a number between 0 to 4 with 3 trials
+level2: you are to guess a number between 0 to 10 with 5 trials
+level3: you are to guess a number between 0 to 16 with 7 trials
+
+if your guess is correct,  you move to the next level
+if you failed at level 2 or 3 u will be taken to the previous level
+
+Enjoy your play\n\n''')
+
+help()
+
+
 def level1():
 	print("LEVEL 1")
 	try:	
@@ -58,6 +73,7 @@ def level3():
 			
 			if user_guess == guess_number:
 				print("Correct")
+				print("Congratulation you completed all the levels.")
 				break
 			else:
 				print("Incorrect")
