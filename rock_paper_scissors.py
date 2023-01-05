@@ -1,5 +1,12 @@
 import random
 
+def help():
+	print("\tINSTRUCTIONS")
+	print('''you are to choose from "ROCK, PAPER, SCISSORS"
+ROCK wins against SCISSORS
+SCISSORS wins against PAPER
+PAPER wins against ROCK\n\n''')
+
 
 def computer():
 	arr = ["rock", "paper", "scissors"]
@@ -33,7 +40,7 @@ def check_winner(b, a):
 	return [computer_score, player1_score, tie]
 
 		
-print("you are to choose ROCK PAPER SCISSORS\n")
+help()
 
 count = 0
 com_score = 0

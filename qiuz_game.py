@@ -12,7 +12,15 @@ def questions():
 	Q5 = int(input("Q5: 2 + 2 = "))
 	return [Q1, Q2, Q3, Q4, Q5]
 
+
+def help():
+	print("\tINSTRUCTIONS")
+	print('''Answer each question correctly
+Each question takes one mark 
+Try your best to score more than average\n\n''')
+
 		
+						
 def remark(score):
 	if score > 0 and score <= 25:
 		print("poor performancell put more effort :(")
@@ -58,6 +66,7 @@ name = input("name: ").upper()
 ask = input(f"{name} Do You Want To Play Quiz Game ? ").upper()
 print("\n")
 if ask == "YES":
+	help()
 	print(f"WELCOME TO QUIZ GAME {name}")
 	print("\n\n")
 	game()
