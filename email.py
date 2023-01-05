@@ -100,5 +100,4 @@ while True:
 		break
 	else:
 		print("i dont understand this")
-		print(mode())	
-password()
+		print(mode())
