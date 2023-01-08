@@ -1,3 +1,5 @@
+#this project is the back end code for one of the most popular game project in python
+
 
 moves = {
 	"00": "",
