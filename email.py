@@ -37,7 +37,7 @@ def signup():
 			confirm_password = input("\tconfirm password  ")
 	
 			if confirm_password == user_password:
-				file = open("/storage/emulated/0/mycode/email.txt", "a")
+				file = open("/storage/emulated/0/email.txt", "a")
 				writing_file = file.write(f"\n{last_name} {middle_name} {first_name}, {age}, {gender},  +234{phone_number},  {user_email}@gmail.com,  {user_password}")
 				file.close()
 				break
@@ -59,11 +59,12 @@ def login():
 	
 	
 	
-	file = open("/storage/emulated/0/mycode/email.txt", "r")
+	file = open("/storage/emulated/0/email.txt", "r")
 	read_file = file.read()
 	
 	
 	contents_of_file = [[j.strip() for j in i .split(", ")]  for i in read_file.split("\n")]
+	print(contents_of_file)
 	
 	
 	pattern = re.compile(r"[a-zA-Z0-9]+@[a-z]+\.[a-z]+")
