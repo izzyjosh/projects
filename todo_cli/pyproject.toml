@@ -1,0 +1,15 @@
+[project]
+name = "todo"
+version = "1.0.0"
+description = "Todo command line app"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+]
+
+[project.scripts]
+todo = "todo.cli:cli"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
