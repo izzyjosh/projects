@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
-engine = create_engine("sqlite+pysqlite:///:memory:", echo=True)
+engine = create_engine("sqlite+pysqlite:///todo.db", echo=False)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
@@ -11,9 +11,4 @@ class Base(DeclarativeBase):
   
 def get_db():
   db = SessionLocal()
-  try:
-    yield db
-  except Exceptions as e:
-    raise e
-  finally:
-    db.close()
+  return db

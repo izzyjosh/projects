@@ -16,9 +16,18 @@ class Task(Base):
   title: Mapped[str] = mapped_column(String(30))
   status: Mapped[StatusEnum] = mapped_column(Enum(StatusEnum), default=StatusEnum.pending)
   created_at: Mapped[date] = mapped_column(Date, default = date.today)
-  dead_line: Mapped[date] = mapped_column(Date, nullable=True)
+  deadline: Mapped[date] = mapped_column(Date, nullable=True)
   
   def __repr__(self):
     return f"{self.title} -> {self.status}"
+  
+  def to_dict(self):
+    return {
+      "id": self.id,
+      "title": self.title,
+      "status": self.status,
+      "created_at": self.created_at.isoformat(),
+      "deadline": self.deadline.isoformat() if self.deadline else None
+    }
   
   
