@@ -1,7 +1,21 @@
 import click
+from rich.console import Console
+from rich.table import Table
+from rich import print_json
 from datetime import datetime
 from db import Base, engine, get_db
 from service import TaskService
+
+console = Console()
+
+# Setting up table for my task manager
+table = Table(title="CLI Task Manager")
+
+table.add_column("id", justify="center")
+table.add_column("start date", justify="center", style="cyan")
+table.add_column("title", style="magenta")
+table.add_column("status", style="green")
+table.add_column("deadline", style="red")
 
 @click.group()
 def cli():
@@ -12,15 +26,17 @@ Base.metadata.create_all(bind=engine)
   
 @cli.command("post")
 @click.option("--title","-t", prompt=True, help="title of the task", type=str)
-@click.option("--deadline", "-dl", prompt=True,     help="Deadline of the task (Format: YYYY-MM-DD)", type=click.DateTime(formats=["%Y-%m-%d"]))
-def add(title: str, deadline: datetime):
+@click.option("--start", "-s", prompt=True,     help="Start date of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
+@click.option("--deadline", "-dl", prompt=True,     help="Deadline of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
+def add(title: str, start: datetime, deadline: datetime):
   
   db = get_db()
   try:
     task_services = TaskService(db)
   
-    task = task_services.add_task(title=title, deadline=deadline)
-    click.echo(f"{task}")
+    task = task_services.add_task(title=title, start=start, deadline=deadline)
+    print_json(data=task)
+    
   finally:
     db.close()
   
@@ -28,19 +44,21 @@ def add(title: str, deadline: datetime):
 @cli.command("put")
 @click.option("--id", type=int, help="Please always pass the id of the task to be updated")
 @click.option("--title", "-t", prompt=True, help="New title",)
-@click.option("--deadline", "-dl", prompt=True, help="New deadline (Format: YYYY-MM-DD)", type=click.DateTime(formats=["%Y-%m-%d"]))
-def update(id: int, title: str, deadline: datetime):
+@click.option("--start", "-s", prompt=True,     help="Start date of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
+@click.option("--deadline", "-dl", prompt=True, help="New deadline (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
+def update(id: int, title: str,start: datetime, deadline: datetime):
   
   db = get_db()
   
   try:
     task_services = TaskService(db)
     
-    task = task_services.update_task(id=id, title=title, deadline=deadline)
+    task = task_services.update_task(id=id, title=title, start=start, deadline=deadline)
     
     if task is None:
       click.echo("Task does not exist")
-    click.echo(f"{task}")
+    print_json(data=task)
+    
   finally:
     db.close()
 
@@ -64,7 +82,8 @@ def delete(id: int):
 
 @cli.command("get")
 @click.option("--id", type=int, help="Id of the task to be fetched")
-def retriev(id: int):
+@click.option("--done/--not-done", default=False)
+def retrieve(id: int, done: bool):
   
   db = get_db()
   try:
@@ -72,13 +91,18 @@ def retriev(id: int):
     
     if id:
       task = task_services.get(id=id)
+      table.add_row(f"{task['id']}", f"{task['start_date']}", f"{task['title']}", f"{task['status']}", f"{task['deadline']}")
+      console.print(table)
       
       if task is None:
         click.echo("Task does not exist")
-      click.echo(f"{task}")
+        
       
     else:
-      task = task_services.fetch()
-      click.echo(f"{task}")
+      tasks = task_services.fetch(done=done)
+      for task in tasks:
+        table.add_row(f"{task['id']}", f"{task['start_date']}", f"{task['title']}", f"{task['status']}", f"{task['deadline']}")
+      console.print(table)
+  
   finally:
     db.close()
