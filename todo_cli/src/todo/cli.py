@@ -17,14 +17,14 @@ table.add_column("title", style="magenta")
 table.add_column("status", style="green")
 table.add_column("deadline", style="red")
 
-@click.group()
+@click.group(help="A CLI Task Manager to add, update, fetch, and delete tasks.")
 def cli():
-  pass
+    pass
  
 Base.metadata.create_all(bind=engine)
   
   
-@cli.command("post")
+@cli.command("post", help="Create or add a new task")
 @click.option("--title","-t", prompt=True, help="title of the task", type=str)
 @click.option("--start", "-s", prompt=True,     help="Start date of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
 @click.option("--deadline", "-dl", prompt=True,     help="Deadline of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
@@ -41,7 +41,7 @@ def add(title: str, start: datetime, deadline: datetime):
     db.close()
   
  
-@cli.command("put")
+@cli.command("put", help="Update an existing task")
 @click.option("--id", type=int, help="Please always pass the id of the task to be updated")
 @click.option("--title", "-t", prompt=True, help="New title",)
 @click.option("--start", "-s", prompt=True,     help="Start date of the task (Format: YYYY-MM-DD HH:MM)", type=click.DateTime(formats=["%Y-%m-%d %H:%M"]))
@@ -63,7 +63,7 @@ def update(id: int, title: str,start: datetime, deadline: datetime):
     db.close()
 
 
-@cli.command("del")
+@cli.command("del", help="Delete a task by Id")
 @click.option("--id", type=int, help="Id of the task to be deleted")
 def delete(id: int):
   
@@ -80,7 +80,7 @@ def delete(id: int):
     db.close()
   
 
-@cli.command("get")
+@cli.command("get", help="Get a particular task by Id and also get all task")
 @click.option("--id", type=int, help="Id of the task to be fetched")
 @click.option("--done/--not-done", default=False)
 def retrieve(id: int, done: bool):
